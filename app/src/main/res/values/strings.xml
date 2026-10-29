@@ -39,8 +39,17 @@
     <string name="phone_folder">Folder on this phone</string>
     <string name="choose_folder">Choose…</string>
     <string name="server_folder">Folder on Nextcloud</string>
-    <string name="server_folder_hint">Such as Games/ScummVM Saves. Made if it is not there.</string>
+    <string name="server_folder_hint">Typed, or chosen below. Made if it is not there.</string>
 
+    <string name="browse">Browse Nextcloud…</string>
+    <string name="nextcloud_top">Nextcloud</string>
+    <string name="up">Up</string>
+    <string name="no_subfolders">No folders in here.</string>
+    <string name="new_folder">New folder</string>
+    <string name="new_folder_name">Name of the new folder</string>
+    <string name="make">Make</string>
+    <string name="try_again">Try again</string>
+    <string name="choose_this_folder">Choose this folder</string>
     <string name="up_to_date">Up to date</string>
     <plurals name="uploaded">
         <item quantity="one">%d sent</item>

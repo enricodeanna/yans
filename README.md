@@ -39,7 +39,8 @@ can be typed in instead. The app asks the server for the account's user id, whic
 made of, since it can differ from the name used to log in.
 
 **Folders.** Each folder on the phone is chosen in Android's folder picker, which lends the app that folder
-alone, for good; it is paired with a folder on Nextcloud, made when missing (`Games/ScummVM Saves`).
+alone, for good; it is paired with a folder on Nextcloud, typed (`Games/ScummVM Saves`, made when missing) or chosen by
+browsing the server's folders, where a new one can be made too.
 Subfolders are synced too. Folders on shared storage (`Documents/…`) are the ones other apps can use as well;
 Android does not let the picker choose `Android/data`.
 
@@ -74,7 +75,6 @@ becomes a conflict copy to look at.
 
 ## Not yet
 
-- Choosing the Nextcloud folder from a list, rather than typing it.
 - Uploads of files larger than the server takes in one request (Nextcloud's chunked upload).
 - WebDAV servers other than Nextcloud (the sync would work; the login is Nextcloud's).
 

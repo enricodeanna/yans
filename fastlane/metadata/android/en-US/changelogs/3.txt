@@ -1,0 +1,1 @@
+Browse the folders on Nextcloud to choose the one to sync, and make a new one there.

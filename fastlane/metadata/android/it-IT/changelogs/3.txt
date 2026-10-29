@@ -1,0 +1,1 @@
+Si possono sfogliare le cartelle di Nextcloud per scegliere quella da sincronizzare, e crearne una nuova.

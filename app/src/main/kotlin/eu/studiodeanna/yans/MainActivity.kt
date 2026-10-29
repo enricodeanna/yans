@@ -11,6 +11,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -47,6 +49,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,8 +67,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.studiodeanna.yans.sync.Account
+import eu.studiodeanna.yans.sync.RemoteFolders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -282,6 +287,7 @@ private fun FoldersScreen(account: Account) {
 
     if (adding) {
         AddFolderDialog(
+            account = account,
             onDismiss = { adding = false },
             onAdd = { uri, name, remote ->
                 adding = false
@@ -371,11 +377,12 @@ private fun PairCard(
 }
 
 @Composable
-private fun AddFolderDialog(onDismiss: () -> Unit, onAdd: (Uri, String, String) -> Unit) {
+private fun AddFolderDialog(account: Account, onDismiss: () -> Unit, onAdd: (Uri, String, String) -> Unit) {
     val context = LocalContext.current
     var uri by remember { mutableStateOf<Uri?>(null) }
     var name by rememberSaveable { mutableStateOf("") }
     var remote by rememberSaveable { mutableStateOf("") }
+    var browsing by rememberSaveable { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { picked ->
         if (picked != null) {
             uri = picked
@@ -400,11 +407,133 @@ private fun AddFolderDialog(onDismiss: () -> Unit, onAdd: (Uri, String, String) 
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
+                OutlinedButton(onClick = { browsing = true }, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.browse))
+                }
             }
         },
         confirmButton = {
             TextButton(onClick = { onAdd(uri!!, name, remote) }, enabled = uri != null) { Text(stringResource(R.string.add)) }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+    if (browsing) {
+        // Opens where the typed folder is, or as near it as there is.
+        RemoteFolderPicker(
+            account = account,
+            start = remote.trim('/', ' ').split('/').filter { it.isNotEmpty() }.dropLast(1).joinToString("/"),
+            onDismiss = { browsing = false },
+            onChoose = {
+                remote = it
+                browsing = false
+            },
+        )
+    }
+}
+
+/** Browses the folders on the server, a folder at a time, to choose one; or makes a new one there. */
+@Composable
+private fun RemoteFolderPicker(account: Account, start: String, onDismiss: () -> Unit, onChoose: (String) -> Unit) {
+    var path by rememberSaveable { mutableStateOf(start) }
+    var folders by remember { mutableStateOf<List<String>?>(null) }
+    var error by remember { mutableStateOf<String?>(null) }
+    var naming by rememberSaveable { mutableStateOf(false) }
+    var newName by rememberSaveable { mutableStateOf("") }
+    var reloads by remember { mutableStateOf(0) }
+    val scope = rememberCoroutineScope()
+    val remoteFolders = remember(account) { RemoteFolders(Syncer.client, account) }
+
+    LaunchedEffect(path, reloads) {
+        folders = null
+        error = null
+        withContext(Dispatchers.IO) { runCatching { remoteFolders.list(path) } }
+            .onSuccess { folders = it }
+            .onFailure {
+                // A starting folder that is not there: from the top instead.
+                if (path == start && path.isNotEmpty()) path = "" else error = it.message ?: it.javaClass.simpleName
+            }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                if (path.isEmpty()) stringResource(R.string.nextcloud_top) else path.substringAfterLast('/'),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (path.isNotEmpty()) {
+                    Text("/$path", style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+                LazyColumn(Modifier.fillMaxWidth().heightIn(max = 320.dp)) {
+                    if (path.isNotEmpty()) {
+                        item {
+                            FolderRow("↑  " + stringResource(R.string.up)) { path = path.substringBeforeLast('/', "") }
+                        }
+                    }
+                    val current = folders
+                    when {
+                        error != null -> item { Text(error!!, color = MaterialTheme.colorScheme.error) }
+                        current == null -> item { CircularProgressIndicator(Modifier.padding(16.dp).size(24.dp)) }
+                        current.isEmpty() -> item {
+                            Text(stringResource(R.string.no_subfolders), Modifier.padding(vertical = 12.dp), style = MaterialTheme.typography.bodyMedium)
+                        }
+                        else -> items(current) { folder ->
+                            FolderRow("📁  $folder") { path = if (path.isEmpty()) folder else "$path/$folder" }
+                        }
+                    }
+                }
+                if (naming) {
+                    OutlinedTextField(
+                        value = newName,
+                        onValueChange = { newName = it.replace("/", "") },
+                        label = { Text(stringResource(R.string.new_folder_name)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        TextButton(onClick = { naming = false }) { Text(stringResource(R.string.cancel)) }
+                        TextButton(
+                            enabled = newName.isNotBlank(),
+                            onClick = {
+                                val name = newName.trim()
+                                scope.launch {
+                                    withContext(Dispatchers.IO) { runCatching { remoteFolders.make(path, name) } }
+                                        .onSuccess {
+                                            naming = false
+                                            newName = ""
+                                            path = it
+                                        }
+                                        .onFailure { error = it.message ?: it.javaClass.simpleName }
+                                }
+                            },
+                        ) { Text(stringResource(R.string.make)) }
+                    }
+                } else {
+                    TextButton(onClick = { naming = true }) { Text("+  " + stringResource(R.string.new_folder)) }
+                }
+                if (error != null) {
+                    TextButton(onClick = { reloads++ }) { Text(stringResource(R.string.try_again)) }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onChoose(path) }, enabled = error == null) { Text(stringResource(R.string.choose_this_folder)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
+    )
+}
+
+@Composable
+private fun FolderRow(label: String, onClick: () -> Unit) {
+    Text(
+        label,
+        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 12.dp, horizontal = 4.dp),
+        style = MaterialTheme.typography.bodyLarge,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
     )
 }

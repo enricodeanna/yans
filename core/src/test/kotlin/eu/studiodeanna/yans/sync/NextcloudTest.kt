@@ -80,6 +80,23 @@ class NextcloudTest {
     }
 
     @Test
+    fun `the server's folders can be browsed and made`() {
+        val account = login()
+        nextcloud.put("Games/ScummVM Saves/monkey2.001", "save", 1000)
+        nextcloud.put("Games/emu/a.srm", "save", 1000)
+        nextcloud.put("documents & more/notes.txt", "notes", 1000)
+        nextcloud.put("photo.jpg", "not a folder", 1000)
+        val folders = RemoteFolders(client, account)
+        assertEquals(listOf("documents & more", "Games"), folders.list(""))
+        assertEquals(listOf("emu", "ScummVM Saves"), folders.list("Games"))
+        assertEquals(emptyList(), folders.list("Games/ScummVM Saves"))
+        assertEquals("Games/New one", folders.make("Games", "New one"))
+        assertEquals("Games/New one", folders.make("Games", "New one"))
+        assertEquals(listOf("emu", "New one", "ScummVM Saves"), folders.list("Games"))
+        assertFailsWith<SyncException> { folders.list("Nowhere") }
+    }
+
+    @Test
     fun `a folder not yet on the server lists empty`() {
         val account = login()
         assertEquals(emptyMap(), WebDavTree(client, account.davRoot, "Nowhere", account.loginName, account.password).list())

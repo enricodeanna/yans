@@ -38,8 +38,17 @@
     <string name="phone_folder">Cartella di questo telefono</string>
     <string name="choose_folder">Scegli…</string>
     <string name="server_folder">Cartella di Nextcloud</string>
-    <string name="server_folder_hint">Per esempio Giochi/ScummVM Saves. Viene creata se non c\'è.</string>
+    <string name="server_folder_hint">Da scrivere o da scegliere qui sotto. Viene creata se non c\'è.</string>
 
+    <string name="browse">Sfoglia Nextcloud…</string>
+    <string name="nextcloud_top">Nextcloud</string>
+    <string name="up">Su</string>
+    <string name="no_subfolders">Nessuna cartella qui dentro.</string>
+    <string name="new_folder">Nuova cartella</string>
+    <string name="new_folder_name">Nome della nuova cartella</string>
+    <string name="make">Crea</string>
+    <string name="try_again">Riprova</string>
+    <string name="choose_this_folder">Scegli questa cartella</string>
     <string name="up_to_date">Allineata</string>
     <plurals name="uploaded">
         <item quantity="one">%d inviato</item>
