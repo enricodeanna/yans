@@ -1,0 +1,14 @@
+<p><b>YA?NS: Yet Another (?) Nextcloud Sync.</b> Turns out there wasn't one.</p>
+
+<p>Keeps folders on your phone and folders on your Nextcloud the same, both ways: what changes on the phone goes to the server, what changes on the server comes to the phone. Made for game saves (ScummVM, emulators), notes, and any folder you use on more than one device.</p>
+
+<ul>
+<li><b>Two-way sync</b> of any folder you choose, subfolders included; deletions are synced too.</li>
+<li><b>Nothing is lost in a conflict:</b> when a file changed on both sides, the newer one wins and the older one is kept next to it as "name (conflict date time).ext", on both sides.</li>
+<li><b>Safe when a folder goes missing:</b> if one side is suddenly empty, the sync stops instead of deleting everything on the other.</li>
+<li><b>Log in with the browser</b>, with Nextcloud's own login flow: the app gets a password of its own, which you can take back from Nextcloud's security settings. An app password typed by hand works too.</li>
+<li><b>Sync when you want:</b> a button in the app, a "Sync now" tile in the quick settings, and optionally every 15 minutes in the background.</li>
+<li>A notification only when a background sync meets a conflict or fails.</li>
+</ul>
+
+<p>No tracking, no ads, no Google services. The code was written by Claude, Anthropic's AI model.</p>

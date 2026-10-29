@@ -1,0 +1,14 @@
+<p><b>YA?NS: Yet Another (?) Nextcloud Sync.</b> A quanto pare non ce n'era un'altra.</p>
+
+<p>Tiene uguali cartelle del telefono e cartelle del tuo Nextcloud, nelle due direzioni: quello che cambia sul telefono va sul server, quello che cambia sul server arriva sul telefono. Pensata per i salvataggi dei giochi (ScummVM, emulatori), per gli appunti e per qualsiasi cartella usata su più dispositivi.</p>
+
+<ul>
+<li><b>Sincronizzazione in due direzioni</b> di qualsiasi cartella scelta, sottocartelle comprese; anche le eliminazioni vengono sincronizzate.</li>
+<li><b>Nessuna perdita nei conflitti:</b> se un file è cambiato da tutte e due le parti, vince il più recente e il più vecchio resta accanto come "nome (conflict data ora).ext", da tutte e due le parti.</li>
+<li><b>Sicura se una cartella sparisce:</b> se una parte è all'improvviso vuota, la sincronizzazione si ferma invece di eliminare tutto dall'altra.</li>
+<li><b>Accesso con il browser</b>, con il sistema di Nextcloud: l'app riceve una password tutta sua, revocabile dalle impostazioni di sicurezza di Nextcloud. Funziona anche una password per app inserita a mano.</li>
+<li><b>Sincronizza quando vuoi:</b> un pulsante nell'app, un riquadro "Sincronizza ora" nelle impostazioni rapide e, se vuoi, ogni 15 minuti in background.</li>
+<li>Una notifica solo quando una sincronizzazione in background trova un conflitto o non riesce.</li>
+</ul>
+
+<p>Niente tracciamento, niente pubblicità, niente servizi Google. Il codice è stato scritto da Claude, il modello di IA di Anthropic.</p>

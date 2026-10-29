@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_expanded">Yet Another (?) Nextcloud Sync</string>
+    <string name="login_intro">Sincronizzazione in due direzioni tra cartelle di questo telefono e cartelle del tuo Nextcloud. Accedi per cominciare.</string>
+    <string name="server">Indirizzo di Nextcloud</string>
+    <string name="login_name">Nome utente</string>
+    <string name="app_password">Password per app</string>
+    <string name="log_in">Accedi</string>
+    <string name="log_in_browser">Accedi con il browser</string>
+    <string name="login_waiting">Approva l\'accesso nel browser, poi torna qui.</string>
+    <string name="open_again">Riapri il browser</string>
+    <string name="use_app_password">Usa invece una password per app</string>
+    <string name="use_browser">Accedi invece con il browser</string>
+    <string name="login_refused_password">Il server ha rifiutato il nome utente o la password.</string>
+    <string name="login_timed_out">L\'accesso non è stato approvato in tempo. Riprova.</string>
+    <string name="cancel">Annulla</string>
+
+    <string name="log_out">Esci</string>
+    <string name="log_out_title">Uscire?</string>
+    <string name="log_out_text">Le cartelle restano nell\'elenco e i loro file restano dove sono. Dopo il prossimo accesso, la prima sincronizzazione confronta di nuovo i file delle due parti.</string>
+    <string name="auto_sync">Sincronizza ogni 15 minuti</string>
+    <string name="auto_sync_detail">In background, quando c\'è la rete. Android può aspettare di più mentre il telefono dorme.</string>
+    <string name="no_folders">Ancora nessuna cartella. Aggiungi una cartella di questo telefono e la cartella di Nextcloud con cui tenerla allineata.</string>
+    <string name="tile_hint">Suggerimento: aggiungi il riquadro “Sincronizza ora” alle impostazioni rapide, e toccalo prima e dopo aver usato una cartella sincronizzata su un altro dispositivo.</string>
+    <string name="sync_all">Sincronizza tutto</string>
+    <string name="sync_now">Sincronizza ora</string>
+    <string name="syncing">Sincronizzazione…</string>
+    <string name="never_synced">Non ancora sincronizzata</string>
+    <string name="just_now">Adesso</string>
+    <string name="phone_folder_named">Telefono: %1$s</string>
+    <string name="server_folder_named">Nextcloud: %1$s</string>
+    <string name="remove">Rimuovi</string>
+    <string name="remove_title">Smettere di sincronizzare %1$s?</string>
+    <string name="remove_text">Nessun file viene eliminato, né sul telefono né sul server.</string>
+
+    <string name="add_folder">Aggiungi cartella</string>
+    <string name="add">Aggiungi</string>
+    <string name="phone_folder">Cartella di questo telefono</string>
+    <string name="choose_folder">Scegli…</string>
+    <string name="server_folder">Cartella di Nextcloud</string>
+    <string name="server_folder_hint">Per esempio Giochi/ScummVM Saves. Viene creata se non c\'è.</string>
+
+    <string name="up_to_date">Allineata</string>
+    <plurals name="uploaded">
+        <item quantity="one">%d inviato</item>
+        <item quantity="other">%d inviati</item>
+    </plurals>
+    <plurals name="downloaded">
+        <item quantity="one">%d ricevuto</item>
+        <item quantity="other">%d ricevuti</item>
+    </plurals>
+    <plurals name="deleted">
+        <item quantity="one">%d eliminato</item>
+        <item quantity="other">%d eliminati</item>
+    </plurals>
+    <plurals name="conflicts">
+        <item quantity="one">%1$d conflitto, tenuta la copia più vecchia: %2$s</item>
+        <item quantity="other">%1$d conflitti, tenute le copie più vecchie: %2$s</item>
+    </plurals>
+    <plurals name="failed">
+        <item quantity="one">%1$d file non sincronizzato: %2$s</item>
+        <item quantity="other">%1$d file non sincronizzati, per esempio %2$s</item>
+    </plurals>
+    <string name="empty_here">La cartella del telefono è vuota, ma aveva dei file. Sul server non è stato eliminato niente. Se l\'hai svuotata apposta, svuota anche la cartella di Nextcloud.</string>
+    <string name="empty_there">La cartella di Nextcloud è vuota o non c\'è, ma aveva dei file. Sul telefono non è stato eliminato niente. Se l\'hai svuotata apposta, svuota anche la cartella del telefono.</string>
+    <string name="login_refused">Il server ha rifiutato l\'accesso. Esci e accedi di nuovo.</string>
+    <string name="cant_reach">Impossibile raggiungere il server (%1$s)</string>
+
+    <string name="tile_label">Sincronizza ora</string>
+    <string name="tile_started">Sincronizzazione…</string>
+    <string name="channel_problems">Conflitti ed errori</string>
+    <string name="notification_title">La sincronizzazione chiede attenzione</string>
+</resources>

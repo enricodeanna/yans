@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">YA?NS</string>
+    <string name="app_expanded">Yet Another (?) Nextcloud Sync</string>
+    <string name="login_intro">Two-way sync of folders on this phone with folders on your Nextcloud. Log in to start.</string>
+    <string name="server">Nextcloud address</string>
+    <string name="login_name">User name</string>
+    <string name="app_password">App password</string>
+    <string name="log_in">Log in</string>
+    <string name="log_in_browser">Log in with the browser</string>
+    <string name="login_waiting">Approve the login in the browser, then come back here.</string>
+    <string name="open_again">Open the browser again</string>
+    <string name="use_app_password">Use an app password instead</string>
+    <string name="use_browser">Log in with the browser instead</string>
+    <string name="login_refused_password">The server refused the user name or the password.</string>
+    <string name="login_timed_out">The login was not approved in time. Try again.</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="log_out">Log out</string>
+    <string name="log_out_title">Log out?</string>
+    <string name="log_out_text">The folders stay on the list and their files stay where they are. After the next login, the first sync compares the files on both sides again.</string>
+    <string name="auto_sync">Sync every 15 minutes</string>
+    <string name="auto_sync_detail">In the background, when there is a network. Android may wait longer while the phone sleeps.</string>
+    <string name="no_folders">No folders yet. Add a folder on this phone and the Nextcloud folder to keep it in step with.</string>
+    <string name="tile_hint">Tip: add the “Sync now” tile to the quick settings, and tap it before and after using a synced folder on another device.</string>
+    <string name="sync_all">Sync all</string>
+    <string name="sync_now">Sync now</string>
+    <string name="syncing">Syncing…</string>
+    <string name="never_synced">Not synced yet</string>
+    <string name="just_now">Just now</string>
+    <string name="phone_folder_named">Phone: %1$s</string>
+    <string name="server_folder_named">Nextcloud: %1$s</string>
+    <string name="remove">Remove</string>
+    <string name="remove_title">Stop syncing %1$s?</string>
+    <string name="remove_text">No file is deleted, on the phone or on the server.</string>
+
+    <string name="add_folder">Add folder</string>
+    <string name="add">Add</string>
+    <string name="phone_folder">Folder on this phone</string>
+    <string name="choose_folder">Choose…</string>
+    <string name="server_folder">Folder on Nextcloud</string>
+    <string name="server_folder_hint">Such as Games/ScummVM Saves. Made if it is not there.</string>
+
+    <string name="up_to_date">Up to date</string>
+    <plurals name="uploaded">
+        <item quantity="one">%d sent</item>
+        <item quantity="other">%d sent</item>
+    </plurals>
+    <plurals name="downloaded">
+        <item quantity="one">%d received</item>
+        <item quantity="other">%d received</item>
+    </plurals>
+    <plurals name="deleted">
+        <item quantity="one">%d deleted</item>
+        <item quantity="other">%d deleted</item>
+    </plurals>
+    <plurals name="conflicts">
+        <item quantity="one">%1$d conflict, the older copy kept: %2$s</item>
+        <item quantity="other">%1$d conflicts, the older copies kept: %2$s</item>
+    </plurals>
+    <plurals name="failed">
+        <item quantity="one">%1$d file not synced: %2$s</item>
+        <item quantity="other">%1$d files not synced, such as %2$s</item>
+    </plurals>
+    <string name="empty_here">The phone\'s folder is empty, though it had files. Nothing was deleted on the server. If you emptied it on purpose, empty the Nextcloud folder too.</string>
+    <string name="empty_there">The Nextcloud folder is empty or missing, though it had files. Nothing was deleted on the phone. If you emptied it on purpose, empty the phone\'s folder too.</string>
+    <string name="login_refused">The server refused the login. Log out and log in again.</string>
+    <string name="cant_reach">Could not reach the server (%1$s)</string>
+
+    <string name="tile_label">Sync now</string>
+    <string name="tile_started">Syncing…</string>
+    <string name="channel_problems">Conflicts and failures</string>
+    <string name="notification_title">Sync needs a look</string>
+</resources>

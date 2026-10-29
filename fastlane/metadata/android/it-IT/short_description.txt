@@ -1,0 +1,1 @@
+Sincronizza cartelle con Nextcloud in due direzioni. Un'altra? Pare di no.

@@ -1,0 +1,1 @@
+Prima versione: sincronizzazione in due direzioni di cartelle con Nextcloud, copie di conflitto, accesso con il browser, riquadro nelle impostazioni rapide, sincronizzazione ogni 15 minuti.

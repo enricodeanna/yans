@@ -1,0 +1,1 @@
+First release: two-way sync of folders with Nextcloud, conflict copies, browser login, quick settings tile, sync every 15 minutes.
