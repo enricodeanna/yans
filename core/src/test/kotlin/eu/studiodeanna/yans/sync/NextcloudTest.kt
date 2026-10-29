@@ -27,8 +27,9 @@ class NextcloudTest {
     }
 
     @Test
-    fun `logging in finds the user's id`() {
+    fun `logging in finds the user's id, on the server as typed`() {
         val account = login()
+        assertEquals(nextcloud.url, account.server)
         assertEquals("enrico@example.org", account.loginName)
         assertEquals("enrico", account.userId)
         assertEquals("app-pass", account.password)

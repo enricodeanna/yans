@@ -21,8 +21,8 @@ data class Account(val server: String, val loginName: String, val userId: String
  * https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
  */
 class Nextcloud(private val client: OkHttpClient) {
-    /** A login waiting for the user's approval at [loginUrl]. */
-    data class Login(val loginUrl: String, val pollUrl: String, val token: String)
+    /** A login on [server], as the user typed it, waiting for the user's approval at [loginUrl]. */
+    data class Login(val server: String, val loginUrl: String, val pollUrl: String, val token: String)
 
     /** Starts a login on [server]; open its [Login.loginUrl] in the browser, then [poll]. */
     fun startLogin(server: String): Login {
@@ -33,6 +33,7 @@ class Nextcloud(private val client: OkHttpClient) {
             if (!response.isSuccessful) throw SyncException("No Nextcloud found at $url (${response.code})")
             val body = response.body!!.string()
             return Login(
+                server = url.toString(),
                 loginUrl = Json.string(body, "login") ?: throw SyncException("No Nextcloud found at $url"),
                 pollUrl = Json.string(body, "endpoint") ?: throw SyncException("No Nextcloud found at $url"),
                 token = Json.string(body, "token") ?: throw SyncException("No Nextcloud found at $url"),
@@ -40,7 +41,11 @@ class Nextcloud(private val client: OkHttpClient) {
         }
     }
 
-    /** The account, once the user has approved the login; null while they have not yet. */
+    /**
+     * The account, once the user has approved the login; null while they have not yet. The account is on the
+     * server as the user typed it, which the login reached: the address the server gives back is made from
+     * what reached it, which behind a reverse proxy can be a name known only inside the proxy's network.
+     */
     fun poll(login: Login): Account? {
         val request = Request.Builder().url(login.pollUrl).header("User-Agent", USER_AGENT)
             .post(FormBody.Builder().add("token", login.token).build()).build()
@@ -49,10 +54,9 @@ class Nextcloud(private val client: OkHttpClient) {
             if (!response.isSuccessful) throw SyncException("The server answered ${response.code}")
             response.body!!.string()
         }
-        val server = Json.string(body, "server") ?: throw SyncException("The server's answer is not understood")
         val loginName = Json.string(body, "loginName") ?: throw SyncException("The server's answer is not understood")
         val password = Json.string(body, "appPassword") ?: throw SyncException("The server's answer is not understood")
-        return account(server, loginName, password)
+        return account(login.server, loginName, password)
     }
 
     /**

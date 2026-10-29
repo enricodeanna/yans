@@ -1,0 +1,1 @@
+Corretto l'accesso con il browser a un Nextcloud dietro un reverse proxy, che dopo l'approvazione falliva con "Unable to resolve host".

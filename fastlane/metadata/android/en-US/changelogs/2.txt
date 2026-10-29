@@ -1,0 +1,1 @@
+Fixed logging in through the browser on a Nextcloud behind a reverse proxy, which failed with "Unable to resolve host" after approving the login.

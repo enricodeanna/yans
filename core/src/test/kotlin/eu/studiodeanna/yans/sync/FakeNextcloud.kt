@@ -22,7 +22,10 @@ class FakeNextcloud : Dispatcher() {
     private val nodes = sortedMapOf<String, Node>(root to Node(null, 0, "root"))
     private var etags = 0
 
-    /** The login is approved once polled this many times. */
+    /**
+     * The login is approved once polled this many times. The server it then names is one behind a reverse
+     * proxy, as Nextcloud can name itself there: a name the app cannot reach.
+     */
     var pollsBeforeApproval = 1
 
     val url get() = server.url("/nextcloud").toString()
@@ -48,7 +51,7 @@ class FakeNextcloud : Dispatcher() {
         }
         if (path == "/nextcloud/login/v2/poll") {
             if (pollsBeforeApproval-- > 1) return MockResponse().setResponseCode(404)
-            return json("""{"server":"$url","loginName":"enrico@example.org","appPassword":"app-pass"}""")
+            return json("""{"server":"https:\/\/nextcloud.internal\/nextcloud","loginName":"enrico@example.org","appPassword":"app-pass"}""")
         }
         if (request.getHeader("Authorization") != okhttp3.Credentials.basic("enrico@example.org", "app-pass")) {
             return MockResponse().setResponseCode(401)
