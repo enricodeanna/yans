@@ -7,7 +7,8 @@
 <li><b>Nothing is lost in a conflict:</b> when a file changed on both sides, the newer one wins and the older one is kept next to it as "name (conflict date time).ext", on both sides.</li>
 <li><b>Safe when a folder goes missing:</b> if one side is suddenly empty, the sync stops instead of deleting everything on the other.</li>
 <li><b>Log in with the browser</b>, with Nextcloud's own login flow: the app gets a password of its own, which you can take back from Nextcloud's security settings. An app password typed by hand works too.</li>
-<li><b>Sync when you want:</b> a button in the app, a "Sync now" tile in the quick settings, and optionally every 15 minutes in the background.</li>
+<li><b>Or one way only:</b> from the phone to Nextcloud, or from Nextcloud to the phone, keeping on the receiving side only the newest so many files, or those of the last so many days, or both. Handy for backups and photos.</li>
+<li><b>Sync when you want:</b> a button in the app, a "Sync now" tile in the quick settings, and in the background on a schedule: every 15 minutes up to every day, or at a set time on the days you choose (say, every Friday at 3:00). Each folder can follow the app's schedule or have its own.</li>
 <li>A notification only when a background sync meets a conflict or fails.</li>
 </ul>
 

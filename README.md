@@ -2,7 +2,7 @@
 
 > **Generated with AI.** The code of this app was written by Claude, Anthropic's AI model.
 
-Two-way sync of folders on an Android phone with folders on a Nextcloud. It began with ScummVM's saved
+Two-way sync of folders on an Android phone with folders on a Nextcloud, or one-way when wanted. It began with ScummVM's saved
 games, which its own cloud sync cannot keep on a Nextcloud: there turned out to be no free app that syncs
 a folder both ways with Nextcloud. Hence the name: *yet another*… or not.
 
@@ -64,10 +64,23 @@ Uploads tell Nextcloud the file's time (`X-OC-Mtime`), so the server keeps it. A
 file's time, so a file downloaded to the phone has the time it was downloaded; that only matters to tell
 which of two conflicting changes is newer, and a change made on the phone after the download is newer anyway.
 
+**One way only.** A folder can instead sync only from the phone to Nextcloud, or only from Nextcloud to the
+phone. New and changed files go that way; nothing deleted on either side is deleted on the other, and a file
+the receiving side deleted is not sent again until it changes. A file changed on the receiving side too is
+replaced, and its own version kept there as a conflict copy. The receiving side can keep only the newest *N*
+files, only those of the last *D* days, or, with both, only files within both: the others are deleted there
+(on Nextcloud, to its trash bin) and the source's are not sent. Every file in the receiving folder counts,
+sent by the app or not; on the phone, files received are ranked by the server's time. Changing a folder's
+direction forgets what the two sides last agreed on, so the next sync compares them afresh, as the first did.
+
 **When it syncs.** *Sync all* and *Sync now* in the app; the *Sync now* tile in the quick settings, which
-syncs as soon as there is a network, even with the app closed; and, when turned on, every 15 minutes in the
-background, the most often Android allows, and later when the phone sleeps. Only one sync runs at a time. A
-sync in the background that meets a conflict or fails says so in a notification.
+syncs as soon as there is a network, even with the app closed; and in the background, on a schedule: only by
+hand, every 15 minutes (the most often Android allows) up to every day, counted from the last sync, or at a
+time of day on chosen days, such as Fridays at 3:00. The app has a schedule, which folders follow unless they
+have one of their own. A single job waits for the next folder due and is set again after every sync; a time
+missed, the phone being off, is synced as soon as it can be. Android may run it later while the phone sleeps
+away from the charger. Only one sync runs at a time. A sync in the background that meets a conflict or fails
+says so in a notification.
 
 **Keeping two devices apart.** The sync is reliable when a folder is used on one device at a time: sync
 after playing on one, before playing on the other. A save changed on both in between is not lost, but it

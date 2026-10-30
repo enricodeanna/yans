@@ -7,7 +7,8 @@
 <li><b>Nessuna perdita nei conflitti:</b> se un file è cambiato da tutte e due le parti, vince il più recente e il più vecchio resta accanto come "nome (conflict data ora).ext", da tutte e due le parti.</li>
 <li><b>Sicura se una cartella sparisce:</b> se una parte è all'improvviso vuota, la sincronizzazione si ferma invece di eliminare tutto dall'altra.</li>
 <li><b>Accesso con il browser</b>, con il sistema di Nextcloud: l'app riceve una password tutta sua, revocabile dalle impostazioni di sicurezza di Nextcloud. Funziona anche una password per app inserita a mano.</li>
-<li><b>Sincronizza quando vuoi:</b> un pulsante nell'app, un riquadro "Sincronizza ora" nelle impostazioni rapide e, se vuoi, ogni 15 minuti in background.</li>
+<li><b>O in un solo senso:</b> dal telefono a Nextcloud, o da Nextcloud al telefono, tenendo dalla parte che riceve solo gli ultimi tot file, o quelli degli ultimi tot giorni, o entrambi. Comodo per backup e foto.</li>
+<li><b>Sincronizza quando vuoi:</b> un pulsante nell'app, un riquadro "Sincronizza ora" nelle impostazioni rapide e, in background, a un orario: da ogni 15 minuti a ogni giorno, oppure a un'ora fissa nei giorni che scegli (per esempio ogni venerdì alle 3:00). Ogni cartella può seguire l'orario dell'app o averne uno suo.</li>
 <li>Una notifica solo quando una sincronizzazione in background trova un conflitto o non riesce.</li>
 </ul>
 

@@ -1,0 +1,2 @@
+Each folder can sync on a schedule of its own: every 15 minutes up to every day, at a set time on chosen days, or only by hand; and the schedule of the others is no longer fixed at 15 minutes.
+Folders can sync one way only, to Nextcloud or to the phone, keeping only the newest files or those of the last days on the receiving side.

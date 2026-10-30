@@ -24,7 +24,7 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
-/** Syncs the folders, one sync at a time, however it was asked for: in the app, from the tile, or every 15 minutes. */
+/** Syncs the folders, one sync at a time, however it was asked for: in the app, from the tile, or on their schedule. */
 object Syncer {
     private val lock = ReentrantLock()
 
@@ -39,23 +39,29 @@ object Syncer {
     /** The id of the folder being synced now, if any. */
     val running: StateFlow<String?> = _running
 
+    /** Whether a sync is going. */
+    val busy get() = lock.isLocked
+
     /**
-     * Syncs [only] that folder, or all of them; does nothing if a sync is going already. In the [background],
-     * conflicts and failures are told in a notification too.
+     * Syncs [only] these folders, or all of them; does nothing, and returns false, if a sync is going already.
+     * In the [background], conflicts and failures are told in a notification too.
      */
-    fun sync(context: Context, only: FolderPair? = null, background: Boolean = false) {
-        if (!lock.tryLock()) return
+    fun sync(context: Context, only: List<FolderPair>? = null, background: Boolean = false): Boolean {
+        if (!lock.tryLock()) return false
         try {
             val store = Store.get(context)
-            val account = store.account.value ?: return
+            val account = store.account.value ?: return true
             val problems = mutableListOf<String>()
-            for (pair in only?.let(::listOf) ?: store.pairs.value) {
+            val ids = only?.map { it.id }?.toSet()
+            // The folders as they are now, in case one was changed or removed since it was asked for.
+            for (pair in store.pairs.value.filter { ids == null || it.id in ids }) {
                 _running.value = pair.id
                 val run = syncPair(context, store, pair, account)
                 store.saveLastRun(pair, run.first)
                 if (run.second) problems += "${pair.localName}: ${run.first.message}"
             }
             if (background && problems.isNotEmpty()) notify(context, problems)
+            return true
         } finally {
             _running.value = null
             lock.unlock()
@@ -69,7 +75,7 @@ object Syncer {
         return try {
             val local = SafTree(context, Uri.parse(pair.treeUri))
             val remote = WebDavTree(client, account.davRoot, pair.remoteFolder, account.loginName, account.password)
-            val report = Sync(local, remote, state, File(context.cacheDir, "carry")).run()
+            val report = Sync(local, remote, state, File(context.cacheDir, "carry"), direction = pair.direction, keep = pair.keep).run()
             LastRun(now, report.failed.isEmpty(), summary(context, report)) to (report.conflicts.isNotEmpty() || report.failed.isNotEmpty())
         } catch (e: Exception) {
             LastRun(now, false, failure(context, e)) to true

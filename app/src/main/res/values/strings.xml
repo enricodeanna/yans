@@ -19,8 +19,11 @@
     <string name="log_out">Log out</string>
     <string name="log_out_title">Log out?</string>
     <string name="log_out_text">The folders stay on the list and their files stay where they are. After the next login, the first sync compares the files on both sides again.</string>
-    <string name="auto_sync">Sync every 15 minutes</string>
-    <string name="auto_sync_detail">In the background, when there is a network. Android may wait longer while the phone sleeps.</string>
+    <string name="auto_sync">Syncing by itself</string>
+    <string name="auto_sync_detail">For the folders without a schedule of their own. In the background, when there is a network; Android may wait longer while the phone sleeps away from the charger.</string>
+    <string name="change">Change</string>
+    <string name="ok">OK</string>
+    <string name="edit">Edit</string>
     <string name="no_folders">No folders yet. Add a folder on this phone and the Nextcloud folder to keep it in step with.</string>
     <string name="tile_hint">Tip: add the “Sync now” tile to the quick settings, and tap it before and after using a synced folder on another device.</string>
     <string name="sync_all">Sync all</string>
@@ -40,6 +43,52 @@
     <string name="choose_folder">Choose…</string>
     <string name="server_folder">Folder on Nextcloud</string>
     <string name="server_folder_hint">Typed, or chosen below. Made if it is not there.</string>
+
+    <string name="direction">Direction</string>
+    <string name="direction_both">Both ways</string>
+    <string name="direction_upload">Only from the phone to Nextcloud</string>
+    <string name="direction_download">Only from Nextcloud to the phone</string>
+    <string name="direction_both_short">⇅ Both ways</string>
+    <string name="direction_upload_short">↑ To Nextcloud only</string>
+    <string name="direction_download_short">↓ To the phone only</string>
+    <string name="one_way_hint">New and changed files go one way only. A file deleted on either side is not deleted on the other, and one changed on the receiving side is replaced, its own version kept as a conflict copy.</string>
+    <string name="direction_changed">The next sync will compare all the files on both sides again.</string>
+    <string name="keep_on_server">On Nextcloud, keep only</string>
+    <string name="keep_on_phone">On the phone, keep only</string>
+    <string name="keep_newest_before">the newest</string>
+    <string name="keep_newest_after">files</string>
+    <string name="keep_days_before">the files of the last</string>
+    <string name="keep_days_after">days</string>
+    <string name="keep_server_hint">With both, only files within both. The others are deleted on Nextcloud, to its trash bin, and are not sent. Every file in the Nextcloud folder counts, sent from here or not.</string>
+    <string name="keep_phone_hint">With both, only files within both. The others are deleted from the phone, for good, and are not received. Every file in the phone\'s folder counts, received or not.</string>
+    <plurals name="keeps_newest">
+        <item quantity="one">keeps the newest file</item>
+        <item quantity="other">keeps the newest %d</item>
+    </plurals>
+    <plurals name="keeps_days">
+        <item quantity="one">keeps the last day</item>
+        <item quantity="other">keeps the last %d days</item>
+    </plurals>
+
+    <string name="schedule">Syncs by itself</string>
+    <string name="schedule_default">Like the other folders: %1$s</string>
+    <string name="schedule_by_hand">Only by hand</string>
+    <string name="schedule_every">Every…</string>
+    <string name="schedule_at">At a set time</string>
+    <string name="schedule_at_hint">Android may run it later while the phone sleeps away from the charger.</string>
+    <string name="choose_a_day">Choose at least a day.</string>
+    <plurals name="every_minutes">
+        <item quantity="one">Every minute</item>
+        <item quantity="other">Every %d minutes</item>
+    </plurals>
+    <plurals name="every_hours">
+        <item quantity="one">Every hour</item>
+        <item quantity="other">Every %d hours</item>
+    </plurals>
+    <string name="every_day">Every day</string>
+    <string name="every_day_at">Every day at %1$s</string>
+    <string name="at_on_days">At %1$s on %2$s</string>
+    <string name="next_sync">next %1$s</string>
 
     <string name="browse">Browse Nextcloud…</string>
     <string name="nextcloud_top">Nextcloud</string>

@@ -18,9 +18,19 @@ data class Report(
     val changed get() = uploaded.size + downloaded.size + deletedHere.size + deletedThere.size + conflicts.size
 }
 
+/** Which way files go: both ways, or only from the phone to the server, or only from the server to the phone. */
+enum class Direction { BOTH, UPLOAD, DOWNLOAD }
+
 /**
- * Two-way sync of [local] with [remote]. [state] is what the last sync left the same on both sides; it is
- * brought up to date as each file is synced, and the caller keeps it for the next time, failure or not.
+ * Which files the receiving side of a one-way sync keeps: only the [newest] so many, only those changed in the
+ * last [days] days, or, with both, only files that are both. Null is no limit.
+ */
+data class Keep(val newest: Int? = null, val days: Int? = null)
+
+/**
+ * Two-way sync of [local] with [remote], or one-way when [direction] says so (see [oneWay]). [state] is what
+ * the last sync left the same on both sides; it is brought up to date as each file is synced, and the caller
+ * keeps it for the next time, failure or not.
  *
  * A file that changed on one side only is copied to the other, and one deleted on one side is deleted on the
  * other. A file deleted on one side and changed on the other comes back: changes win over deletions. A file
@@ -35,6 +45,8 @@ class Sync(
     private val scratch: File,
     private val now: () -> Long = System::currentTimeMillis,
     private val zone: ZoneId = ZoneId.systemDefault(),
+    private val direction: Direction = Direction.BOTH,
+    private val keep: Keep = Keep(),
 ) {
     private val uploaded = mutableListOf<String>()
     private val downloaded = mutableListOf<String>()
@@ -47,18 +59,103 @@ class Sync(
         scratch.mkdirs()
         val localFiles = local.list()
         val remoteFiles = remote.list()
+        if (direction != Direction.BOTH) {
+            oneWay(localFiles, remoteFiles)
+            return report()
+        }
         refuseToEmpty(localFiles, remoteFiles)
         for (path in (localFiles.keys + remoteFiles.keys + state.keys).sorted()) {
-            try {
-                syncFile(path, localFiles[path], remoteFiles[path], state[path], localFiles.keys + remoteFiles.keys)
-            } catch (e: LoginRefusedException) {
-                throw e
-            } catch (e: Exception) {
-                failed[path] = e.message ?: e.javaClass.simpleName
+            attempt(path) { syncFile(path, localFiles[path], remoteFiles[path], state[path], localFiles.keys + remoteFiles.keys) }
+        }
+        return report()
+    }
+
+    private fun report() = Report(uploaded, downloaded, deletedHere, deletedThere, conflicts, failed)
+
+    /** A file that fails is told in the report, and the others go on; a login refused stops them all. */
+    private fun attempt(path: String, block: () -> Unit) {
+        try {
+            block()
+        } catch (e: LoginRefusedException) {
+            throw e
+        } catch (e: Exception) {
+            failed[path] = e.message ?: e.javaClass.simpleName
+        }
+    }
+
+    /**
+     * Sends files one way only, from the source to the receiving side: those new or changed on the source since
+     * they were last sent. Nothing deleted on either side is deleted on the other, and a file the receiving
+     * side deleted is not sent again until the source changes it. A file changed on the receiving side as well
+     * is replaced by the source's, and its own version kept there as a conflict copy.
+     *
+     * With [keep], the receiving side keeps only the newest files, or the recent ones: the others are deleted
+     * there and those of the source are not sent. Every file on the receiving side counts, sent or not.
+     */
+    private fun oneWay(localFiles: Map<String, FileInfo>, remoteFiles: Map<String, FileInfo>) {
+        val up = direction == Direction.UPLOAD
+        val sources = if (up) localFiles else remoteFiles
+        val targets = if (up) remoteFiles else localFiles
+        val taken = localFiles.keys + remoteFiles.keys
+        // Nothing is left to remember of a file gone from both sides.
+        state.keys.retainAll(taken)
+
+        val outgoing = sources.values.filter { file -> state[file.path]?.let { sourceTag(it) } != file.tag }
+        // When each file on the receiving side changed: the source's time where both still hold what was sent,
+        // since a file written on the phone has the time it was written instead.
+        val times = targets.values.associate { file ->
+            val base = state[file.path]
+            val source = sources[file.path]
+            val same = base != null && source != null && sourceTag(base) == source.tag && targetTag(base) == file.tag
+            file.path to if (same) source.modified else file.modified
+        } + outgoing.associate { it.path to it.modified }
+        val kept = kept(times)
+
+        for (path in targets.keys.sorted()) {
+            if (path in kept) continue
+            attempt(path) {
+                (if (up) remote else local).delete(path)
+                if (up) deletedThere += path else deletedHere += path
             }
         }
-        return Report(uploaded, downloaded, deletedHere, deletedThere, conflicts, failed)
+        for (file in outgoing.sortedBy { it.path }) {
+            if (file.path in kept) attempt(file.path) { send(file, targets[file.path], taken) }
+        }
     }
+
+    /** The paths kept by [keep], out of these, with when each changed. */
+    private fun kept(times: Map<String, Long>): Set<String> {
+        val since = keep.days?.let { now() - it * 24L * 60 * 60 * 1000 }
+        val recent = times.entries.filter { since == null || it.value >= since }
+            .sortedWith(compareByDescending<Map.Entry<String, Long>> { it.value }.thenBy { it.key })
+        return (keep.newest?.let(recent::take) ?: recent).map { it.key }.toSet()
+    }
+
+    private fun send(file: FileInfo, there: FileInfo?, taken: Set<String>) {
+        val up = direction == Direction.UPLOAD
+        val from = if (up) local else remote
+        val to = if (up) remote else local
+        val base = state[file.path]
+        val conflict = there != null && (base == null || targetTag(base) != there.tag)
+        if (conflict) {
+            if (there!!.size == file.size && sameContent(file.path)) {
+                state[file.path] = if (up) Base(file.tag, there.tag) else Base(there.tag, file.tag)
+                return
+            }
+            carry(to, file.path, to, conflictPath(file.path, taken), there.modified)
+        }
+        val written = carry(from, file.path, to, file.path, file.modified)
+        state[file.path] = if (up) Base(file.tag, written.tag) else Base(written.tag, file.tag)
+        when {
+            conflict -> conflicts += file.path
+            up -> uploaded += file.path
+            else -> downloaded += file.path
+        }
+    }
+
+    private fun sourceTag(base: Base) = if (direction == Direction.UPLOAD) base.localTag else base.remoteTag
+
+    private fun targetTag(base: Base) = if (direction == Direction.UPLOAD) base.remoteTag else base.localTag
 
     /**
      * A side that lists nothing at all, where the last sync left files, is far more likely a folder lost (a

@@ -1,0 +1,2 @@
+Ogni cartella può sincronizzarsi con un orario suo: da ogni 15 minuti a ogni giorno, a un'ora fissa nei giorni scelti, o solo a mano; e quello delle altre non è più fisso a 15 minuti.
+Le cartelle possono sincronizzarsi in un solo senso, verso Nextcloud o verso il telefono, tenendo dalla parte che riceve solo i file più recenti o quelli degli ultimi giorni.

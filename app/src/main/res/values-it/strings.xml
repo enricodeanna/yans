@@ -18,8 +18,11 @@
     <string name="log_out">Esci</string>
     <string name="log_out_title">Uscire?</string>
     <string name="log_out_text">Le cartelle restano nell\'elenco e i loro file restano dove sono. Dopo il prossimo accesso, la prima sincronizzazione confronta di nuovo i file delle due parti.</string>
-    <string name="auto_sync">Sincronizza ogni 15 minuti</string>
-    <string name="auto_sync_detail">In background, quando c\'è la rete. Android può aspettare di più mentre il telefono dorme.</string>
+    <string name="auto_sync">Sincronizzazione automatica</string>
+    <string name="auto_sync_detail">Per le cartelle senza un orario proprio. In background, quando c\'è la rete; Android può aspettare di più mentre il telefono dorme lontano dal caricatore.</string>
+    <string name="change">Cambia</string>
+    <string name="ok">OK</string>
+    <string name="edit">Modifica</string>
     <string name="no_folders">Ancora nessuna cartella. Aggiungi una cartella di questo telefono e la cartella di Nextcloud con cui tenerla allineata.</string>
     <string name="tile_hint">Suggerimento: aggiungi il riquadro “Sincronizza ora” alle impostazioni rapide, e toccalo prima e dopo aver usato una cartella sincronizzata su un altro dispositivo.</string>
     <string name="sync_all">Sincronizza tutto</string>
@@ -39,6 +42,52 @@
     <string name="choose_folder">Scegli…</string>
     <string name="server_folder">Cartella di Nextcloud</string>
     <string name="server_folder_hint">Da scrivere o da scegliere qui sotto. Viene creata se non c\'è.</string>
+
+    <string name="direction">Direzione</string>
+    <string name="direction_both">Nei due sensi</string>
+    <string name="direction_upload">Solo dal telefono a Nextcloud</string>
+    <string name="direction_download">Solo da Nextcloud al telefono</string>
+    <string name="direction_both_short">⇅ Nei due sensi</string>
+    <string name="direction_upload_short">↑ Solo verso Nextcloud</string>
+    <string name="direction_download_short">↓ Solo verso il telefono</string>
+    <string name="one_way_hint">I file nuovi e modificati vanno in un solo senso. Un file eliminato da una parte non viene eliminato dall\'altra, e uno modificato dalla parte che riceve viene sostituito, conservandone la versione come copia in conflitto.</string>
+    <string name="direction_changed">La prossima sincronizzazione confronterà di nuovo tutti i file delle due parti.</string>
+    <string name="keep_on_server">Su Nextcloud, tieni solo</string>
+    <string name="keep_on_phone">Sul telefono, tieni solo</string>
+    <string name="keep_newest_before">i</string>
+    <string name="keep_newest_after">file più recenti</string>
+    <string name="keep_days_before">i file degli ultimi</string>
+    <string name="keep_days_after">giorni</string>
+    <string name="keep_server_hint">Con entrambi, solo i file che rientrano in tutti e due. Gli altri vengono eliminati su Nextcloud, nel suo cestino, e non vengono inviati. Conta ogni file della cartella di Nextcloud, inviato da qui o no.</string>
+    <string name="keep_phone_hint">Con entrambi, solo i file che rientrano in tutti e due. Gli altri vengono eliminati dal telefono, definitivamente, e non vengono ricevuti. Conta ogni file della cartella del telefono, ricevuto o no.</string>
+    <plurals name="keeps_newest">
+        <item quantity="one">tiene il file più recente</item>
+        <item quantity="other">tiene i %d più recenti</item>
+    </plurals>
+    <plurals name="keeps_days">
+        <item quantity="one">tiene l\'ultimo giorno</item>
+        <item quantity="other">tiene gli ultimi %d giorni</item>
+    </plurals>
+
+    <string name="schedule">Sincronizzazione automatica</string>
+    <string name="schedule_default">Come le altre cartelle: %1$s</string>
+    <string name="schedule_by_hand">Solo a mano</string>
+    <string name="schedule_every">Ogni…</string>
+    <string name="schedule_at">A un orario</string>
+    <string name="schedule_at_hint">Android può farla più tardi mentre il telefono dorme lontano dal caricatore.</string>
+    <string name="choose_a_day">Scegli almeno un giorno.</string>
+    <plurals name="every_minutes">
+        <item quantity="one">Ogni minuto</item>
+        <item quantity="other">Ogni %d minuti</item>
+    </plurals>
+    <plurals name="every_hours">
+        <item quantity="one">Ogni ora</item>
+        <item quantity="other">Ogni %d ore</item>
+    </plurals>
+    <string name="every_day">Ogni giorno</string>
+    <string name="every_day_at">Ogni giorno alle %1$s</string>
+    <string name="at_on_days">Alle %1$s di %2$s</string>
+    <string name="next_sync">prossima %1$s</string>
 
     <string name="browse">Sfoglia Nextcloud…</string>
     <string name="nextcloud_top">Nextcloud</string>
