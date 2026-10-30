@@ -43,7 +43,7 @@ class NextcloudTest {
 
     @Test
     fun `server addresses are read as typed`() {
-        assertEquals("https://enricoirene.ddns.net/nextcloud", Nextcloud.serverUrl("enricoirene.ddns.net/nextcloud/")!!.toString())
+        assertEquals("https://cloud.example.org/nextcloud", Nextcloud.serverUrl("cloud.example.org/nextcloud/")!!.toString())
         assertEquals("https://cloud.example.org/", Nextcloud.serverUrl(" https://cloud.example.org/index.php/apps/files ")!!.toString())
         assertNull(Nextcloud.serverUrl(""))
     }
